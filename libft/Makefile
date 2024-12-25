@@ -6,7 +6,7 @@
 #    By: halnuma <halnuma@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/11/18 08:45:55 by halnuma           #+#    #+#              #
-#    Updated: 2024/12/16 15:00:41 by halnuma          ###   ########.fr        #
+#    Updated: 2024/12/25 16:43:13 by halnuma          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -22,6 +22,7 @@ _YELLOW			= \033[0;33m
 _BLUE			= \033[0;34m
 _PURPLE			= \033[0;35m
 _CYAN			= \033[0;36m
+_BOLD			= \e[1m
 
 # ------ VARIABLES ------
 
@@ -69,24 +70,26 @@ all: 			libft $(NAME)
 $(NAME): 		$(OBJ_ALL) Makefile $(P_INC)
 				@cp $(LIBFT) $(NAME)
 				@$(AR) $(NAME) $(OBJ_ALL)
-				@echo "$(_GREEN)libft compiled!$(_END)"
+				@echo -n "$(_CYAN)$(_BOLD)]$(_END)"
+				@echo "$(_GREEN)$(_BOLD) => Libft compiled!$(_END)"
 
 $(P_OBJ):
 				@mkdir -p $(P_OBJ)
 
 $(P_OBJ)%.o:	$(P_PRINTF)%.c Makefile $(HEADERS) | $(P_OBJ)
-#				@echo "$(_YELLOW)Compiling $<$(_END)"
+				@echo -n "$(_YELLOW)=$(_END)"
 				@$(CC) $(CFLAGS) -I $(P_INC) -c $< -o $@
 
 $(P_OBJ)%.o:	$(P_UTILS)%.c Makefile $(HEADERS) | $(P_OBJ)
-#				@echo "$(_YELLOW)Compiling $<$(_END)"
+				@echo -n "$(_YELLOW)=$(_END)"
 				@$(CC) $(CFLAGS) -I $(P_INC) -c $< -o $@
 
 $(P_OBJ)%.o:	$(P_GNL)%.c Makefile $(HEADERS) | $(P_OBJ)
-#				@echo "$(_YELLOW)Compiling $<$(_END)"
+				@echo -n "$(_YELLOW)=$(_END)"
 				@$(CC) $(CFLAGS) -I $(P_INC) -c $< -o $@
 
 libft:		
+				@echo -n "$(_CYAN)$(_BOLD)[$(_END)"
 				@$(MAKE) -C $(P_LIB) --no-print-directory
 
 # ------ BASIC RULES ------
@@ -94,13 +97,13 @@ libft:
 clean: 
 				@rm -rf $(P_OBJ)
 				@$(MAKE) -C $(P_LIB) clean --no-print-directory
-				@echo "$(_CYAN)libft cleaned!$(_END)"
+				@echo "$(_CYAN)Libft cleaned!$(_END)"
 
 fclean:
 #				@$(MAKE) clean --no-print-directory
 				@$(MAKE) -C $(P_LIB) fclean --no-print-directory
 				@rm -rf $(NAME)
-				@echo "$(_CYAN)libft full cleaned!$(_END)"
+				@echo "$(_CYAN)Libft full cleaned!$(_END)"
 
 re:
 				@$(MAKE) fclean --no-print-directory

@@ -10,10 +10,14 @@ _YELLOW			= \033[0;33m
 _BLUE			= \033[0;34m
 _PURPLE			= \033[0;35m
 _CYAN			= \033[0;36m
+_BOLD			= \e[1m
+
 
 # ------ VARIABLES ------
 
-NAME			= 42SP
+NAME			= Minitalk
+NAME_C			= client
+NAME_S			= server
 CC				= cc
 AR				= ar -rcs
 CFLAGS			= -Wall -Wextra -Werror
@@ -22,40 +26,42 @@ CFLAGS			= -Wall -Wextra -Werror
 
 P_OBJ 			= obj/
 P_SRC 			= src/
-P_UTILS			= $(P_SRC)utils/
 P_INC			= includes/
 P_LIB			= libft/
 
 # ------ FILES ------
 
-MAIN			= main
+CLIENT			= client
 
-UTILS			=
+SERVER			= server
 
-HDR_SRC			= libft
+HDR_SRC			= libft					minitalk
 
-SRC_MAIN		= $(addprefix $(P_SRC), $(addsuffix .c, $(MAIN)))
-SRC_UTILS		= $(addprefix $(P_UTILS), $(addsuffix .c, $(UTILS)))
-SRC_ALL			= $(SRC_MAIN) $(SRC_UTILS)
-
-OBJ_MAIN 		= $(addprefix $(P_OBJ), $(addsuffix .o, $(MAIN)))
-OBJ_UTILS 		= $(addprefix $(P_OBJ), $(addsuffix .o, $(UTILS)))
-OBJ_ALL 		= $(OBJ_MAIN) $(OBJ_UTILS)
+SRC_CLIENT		= $(addprefix $(P_SRC), $(addsuffix .c, $(CLIENT)))
+SRC_SERVER		= $(addprefix $(P_SRC), $(addsuffix .c, $(SERVER)))
 
 HEADERS			= $(addprefix $(P_INC), $(addsuffix .h, $(HDR_SRC)))
 LIBFT			= $(P_LIB)libft.a
 
 # ------ RULES ------
 
-all: 			libft $(NAME)
+all: 			libft $(NAME_C) $(NAME_S)
+				@echo -n "$(_CYAN)$(_BOLD)]$(_END)"
+				@echo "$(_GREEN)$(_BOLD) => $(NAME) compiled!$(_END)"
 
-$(NAME): 		$(SRC_ALL) Makefile $(HEADERS)
-				@$(CC) $(CFLAGS) -I $(P_INC) $(SRC_ALL) $(LIBFT) -o $@
-				@echo "$(_YELLOW)Compiling $(SRC_ALL)$(_END)"
-				@echo "$(_GREEN)$(NAME) compiled!$(_END)"
+$(NAME_C): 		$(SRC_CLIENT) Makefile $(HEADERS)
+				@$(CC) $(CFLAGS) -I $(P_INC) $(SRC_CLIENT) $(LIBFT) -o $@
+				@echo -n "$(_YELLOW)=$(_END)"
+#				@echo "$(_GREEN)$(NAME_C) compiled!$(_END)"
+
+$(NAME_S): 		$(SRC_SERVER) Makefile $(HEADERS)
+				@$(CC) $(CFLAGS) -I $(P_INC) $(SRC_SERVER) $(LIBFT) -o $@
+				@echo -n "$(_YELLOW)=$(_END)"
+#				@echo "$(_GREEN)$(NAME_S) compiled!$(_END)"
 
 libft:		
 				@$(MAKE) -C $(P_LIB) --no-print-directory
+				@echo -n "$(_CYAN)$(_BOLD)[$(_END)"
 
 # ------ BASIC RULES ------
 
@@ -68,7 +74,8 @@ fclean:
 				@$(MAKE) clean --no-print-directory
 				@$(MAKE) -C $(P_LIB) fclean --no-print-directory
 				@rm -rf $(LIBFT)
-				@rm -rf $(NAME)
+				@rm -rf $(NAME_C)
+				@rm -rf $(NAME_S)
 				@echo "$(_CYAN)$(NAME) full cleaned!$(_END)"
 
 re:
