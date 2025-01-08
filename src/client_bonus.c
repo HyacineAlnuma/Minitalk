@@ -1,17 +1,17 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   client.c                                           :+:      :+:    :+:   */
+/*   client_bonus.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: halnuma <halnuma@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/25 10:21:31 by halnuma           #+#    #+#             */
-/*   Updated: 2025/01/08 10:19:10 by halnuma          ###   ########.fr       */
+/*   Updated: 2025/01/08 14:04:27 by halnuma          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
-#include "minitalk.h"
+#include "minitalk_bonus.h"
 
 /*
 	Cette  fonction va envoyer la string bit par bit.
@@ -28,6 +28,19 @@
 	j eme bit du resultat sera donc aussi zero, donnant donc résultat = 0, on
 	envoit donc SIGUSR2, stipulant que le j eme bit est 0.
 */
+
+void	send_null_char(int pid)
+{
+	int		i;
+
+	i = 0;
+	while (i < 8)
+	{
+		kill(pid, SIGUSR2);
+		usleep(100);
+		i++;
+	}
+}
 
 void	send_signal(char *s_pid, char *message)
 {
@@ -53,19 +66,21 @@ void	send_signal(char *s_pid, char *message)
 		}
 		i++;
 	}
+	send_null_char(pid);
 }
 
-// void	signal_handler(int signal)
-// {
-// 	if (signal == SIGUSR1)
-// 		ft_printf("Message has been received by the server!");
-// }
+void	signal_handler(int signal)
+{
+	if (signal == SIGUSR1)
+		ft_printf("Message has been received by the server!");
+}
 
 int	main(int ac, char **av)
 {
+	ft_printf("PID: %d\n", getpid());
 	if (ac > 1)
 		send_signal(av[1], av[2]);
-	// while (1)
-	// 	signal(SIGUSR1, signal_handler);
+	while (1)
+		signal(SIGUSR1, signal_handler);
 	return (0);
 }

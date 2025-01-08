@@ -35,10 +35,17 @@ CLIENT			= client
 
 SERVER			= server
 
-HDR_SRC			= libft					minitalk
+CLIENT_BONUS	= client_bonus
+
+SERVER_BONUS	= server_bonus
+
+HDR_SRC			= libft					minitalk		\
+				minitalk_bonus
 
 SRC_CLIENT		= $(addprefix $(P_SRC), $(addsuffix .c, $(CLIENT)))
 SRC_SERVER		= $(addprefix $(P_SRC), $(addsuffix .c, $(SERVER)))
+SRC_C_BONUS		= $(addprefix $(P_SRC), $(addsuffix .c, $(CLIENT_BONUS)))
+SRC_S_BONUS		= $(addprefix $(P_SRC), $(addsuffix .c, $(SERVER_BONUS)))
 
 HEADERS			= $(addprefix $(P_INC), $(addsuffix .h, $(HDR_SRC)))
 LIBFT			= $(P_LIB)libft.a
@@ -49,19 +56,31 @@ all: 			libft $(NAME_C) $(NAME_S)
 #				@echo -n "$(_CYAN)$(_BOLD)]$(_END)"
 #				@echo "$(_GREEN)$(_BOLD) => $(NAME) compiled!$(_END)"
 
-$(NAME_C): 		$(SRC_CLIENT) Makefile $(HEADERS)
-				@$(CC) $(CFLAGS) -I $(P_INC) $(SRC_CLIENT) $(LIBFT) -o $@
-				@echo "$(_YELLOW)Compiling $(SRC_CLIENT)$(_END)"
-				@echo "$(_GREEN)$(_BOLD)=> $(NAME_C) compiled!$(_END)"
+$(NAME_C): 			$(SRC_CLIENT) Makefile $(HEADERS)
+					@$(CC) $(CFLAGS) -I $(P_INC) $(SRC_CLIENT) $(LIBFT) -o $@
+					@echo "$(_YELLOW)Compiling $(SRC_CLIENT)$(_END)"
+					@echo "$(_GREEN)$(_BOLD)=> $(NAME_C) compiled!$(_END)"
 
-$(NAME_S): 		$(SRC_SERVER) Makefile $(HEADERS)
-				@$(CC) $(CFLAGS) -I $(P_INC) $(SRC_SERVER) $(LIBFT) -o $@
-				@echo "$(_YELLOW)Compiling $(SRC_SERVER)$(_END)"
-				@echo "$(_GREEN)$(_BOLD)=> $(NAME_S) compiled!$(_END)"
+$(NAME_S): 			$(SRC_SERVER) Makefile $(HEADERS)
+					@$(CC) $(CFLAGS) -I $(P_INC) $(SRC_SERVER) $(LIBFT) -o $@
+					@echo "$(_YELLOW)Compiling $(SRC_SERVER)$(_END)"
+					@echo "$(_GREEN)$(_BOLD)=> $(NAME_S) compiled!$(_END)"
+
+$(NAME_C)_bonus: 	$(SRC_C_BONUS) Makefile $(HEADERS)
+					@$(CC) $(CFLAGS) -I $(P_INC) $(SRC_C_BONUS) $(LIBFT) -o $@
+					@echo "$(_YELLOW)Compiling $(SRC_C_BONUS)$(_END)"
+					@echo "$(_GREEN)$(_BOLD)=> $(NAME_C)_bonus compiled!$(_END)"
+
+$(NAME_S)_bonus: 	$(SRC_S_BONUS) Makefile $(HEADERS)
+					@$(CC) $(CFLAGS) -I $(P_INC) $(SRC_S_BONUS) $(LIBFT) -o $@
+					@echo "$(_YELLOW)Compiling $(SRC_S_BONUS)$(_END)"
+					@echo "$(_GREEN)$(_BOLD)=> $(NAME_S)_bonus compiled!$(_END)"
+
+bonus :				libft $(NAME_C)_bonus $(NAME_S)_bonus
 
 libft:		
-				@$(MAKE) -C $(P_LIB) --no-print-directory
-#				@echo -n "$(_CYAN)$(_BOLD)[$(_END)"
+					@$(MAKE) -C $(P_LIB) --no-print-directory
+#					@echo -n "$(_CYAN)$(_BOLD)[$(_END)"
 
 # ------ BASIC RULES ------
 
@@ -76,6 +95,8 @@ fclean:
 				@rm -rf $(LIBFT)
 				@rm -rf $(NAME_C)
 				@rm -rf $(NAME_S)
+				@rm -rf $(NAME_C)_bonus
+				@rm -rf $(NAME_S)_bonus
 				@echo "$(_CYAN)$(NAME) full cleaned!$(_END)"
 
 re:
