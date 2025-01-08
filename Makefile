@@ -46,22 +46,22 @@ LIBFT			= $(P_LIB)libft.a
 # ------ RULES ------
 
 all: 			libft $(NAME_C) $(NAME_S)
-				@echo -n "$(_CYAN)$(_BOLD)]$(_END)"
-				@echo "$(_GREEN)$(_BOLD) => $(NAME) compiled!$(_END)"
+#				@echo -n "$(_CYAN)$(_BOLD)]$(_END)"
+#				@echo "$(_GREEN)$(_BOLD) => $(NAME) compiled!$(_END)"
 
 $(NAME_C): 		$(SRC_CLIENT) Makefile $(HEADERS)
 				@$(CC) $(CFLAGS) -I $(P_INC) $(SRC_CLIENT) $(LIBFT) -o $@
-				@echo -n "$(_YELLOW)=$(_END)"
-#				@echo "$(_GREEN)$(NAME_C) compiled!$(_END)"
+				@echo "$(_YELLOW)Compiling $(SRC_CLIENT)$(_END)"
+				@echo "$(_GREEN)$(_BOLD)=> $(NAME_C) compiled!$(_END)"
 
 $(NAME_S): 		$(SRC_SERVER) Makefile $(HEADERS)
 				@$(CC) $(CFLAGS) -I $(P_INC) $(SRC_SERVER) $(LIBFT) -o $@
-				@echo -n "$(_YELLOW)=$(_END)"
-#				@echo "$(_GREEN)$(NAME_S) compiled!$(_END)"
+				@echo "$(_YELLOW)Compiling $(SRC_SERVER)$(_END)"
+				@echo "$(_GREEN)$(_BOLD)=> $(NAME_S) compiled!$(_END)"
 
 libft:		
 				@$(MAKE) -C $(P_LIB) --no-print-directory
-				@echo -n "$(_CYAN)$(_BOLD)[$(_END)"
+#				@echo -n "$(_CYAN)$(_BOLD)[$(_END)"
 
 # ------ BASIC RULES ------
 
@@ -81,4 +81,3 @@ fclean:
 re:
 				@$(MAKE) fclean --no-print-directory
 				@$(MAKE) all --no-print-directory
-				@echo "$(_CYAN)$(NAME) rebuilt!$(_END)"
