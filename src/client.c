@@ -6,28 +6,12 @@
 /*   By: halnuma <halnuma@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/25 10:21:31 by halnuma           #+#    #+#             */
-/*   Updated: 2025/01/13 13:19:15 by halnuma          ###   ########.fr       */
+/*   Updated: 2025/01/13 13:24:50 by halnuma          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 #include "minitalk.h"
-
-/*
-	Cette  fonction va envoyer la string bit par bit.
-	Pour chaque char on va vérifier c & (1 << j) sachant que 1 = 00000001
-	et que j représente le nombre de fois qu'on va décaler le 1 a gauche.
-	& compare les 2 valeurs bit par bit, il faut que les 2 bit soient 
-	égal a 1 pour que le résulat soit égal a 1, sachant que tous les
-	bits de 1 sont égal a 0 sauf le j eme a partant de la droite, tous les bits
-	du résultats seront égal a 0 sauf potentiellement le j eme, celui que l'on
-	veut tester donc. En faisant ca on "masque" tous les autres bits que le j eme
-	afin de tester uniquement celui-ci. Si le j eme bit de c est 1, le j eme
-	bit du résultat sera 1, donnant donc un resultat != 0. On envoie donc dans
-	ce cas SIGUSR1, stipulant que le j eme bit est 1. Si je j eme bit est 0, le
-	j eme bit du resultat sera donc aussi zero, donnant donc résultat = 0, on
-	envoit donc SIGUSR2, stipulant que le j eme bit est 0.
-*/
 
 void	send_signal(char *s_pid, char *message)
 {
