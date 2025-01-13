@@ -6,7 +6,7 @@
 /*   By: halnuma <halnuma@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/25 10:21:49 by halnuma           #+#    #+#             */
-/*   Updated: 2025/01/08 15:26:50 by halnuma          ###   ########.fr       */
+/*   Updated: 2025/01/13 13:05:36 by halnuma          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,43 +44,32 @@ void	signal_handler(int signal, siginfo_t *info, void *context)
 {
 	static int		i = 0;
 	static int		c = 0;
-	static int		pid = 0;
 
 	(void)context;
-	if (!pid)
-		pid = info->si_pid;
 	if (signal == SIGUSR1)
-		c = c | (1 << i);
+		c |= (1 << i);
 	i++;
 	if (i == 8)
 	{
-		if (!c)
-		{
-			kill(pid, SIGUSR1);
-			ft_printf("%d", pid);
-		}
+		if (c == '\0')
+			kill(info->si_pid, SIGUSR2);
 		write(1, &c, 1);
 		c = 0;
 		i = 0;
 	}
+	kill(info->si_pid, SIGUSR1);
 }
 
 int	main(void)
 {
 	struct sigaction	sa;
 
-	sa.sa_sigaction = signal_handler;
-	sa.sa_flags = 0;
-	sigemptyset(&sa.sa_mask);
-	sigaddset(&sa.sa_mask, SIGUSR1);
-	sigaddset(&sa.sa_mask, SIGUSR2);
 	ft_printf("PID: %d\n", getpid());
 	ft_printf("Waiting for message...\n");
+	sa.sa_sigaction = &signal_handler;
+	sigaction(SIGUSR1, &sa, NULL);
+	sigaction(SIGUSR2, &sa, NULL);
 	while (1)
-	{
-		sigaction(SIGUSR1, &sa, NULL);
-		sigaction(SIGUSR2, &sa, NULL);
 		pause();
-	}
 	return (0);
 }

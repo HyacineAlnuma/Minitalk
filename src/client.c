@@ -6,7 +6,7 @@
 /*   By: halnuma <halnuma@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/25 10:21:31 by halnuma           #+#    #+#             */
-/*   Updated: 2025/01/08 10:19:10 by halnuma          ###   ########.fr       */
+/*   Updated: 2025/01/13 13:19:15 by halnuma          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,24 +48,41 @@ void	send_signal(char *s_pid, char *message)
 				kill(pid, SIGUSR1);
 			else
 				kill(pid, SIGUSR2);
-			usleep(100);
+			while (g_bit_received)
+				pause();
+			g_bit_received = 1;
 			j++;
 		}
 		i++;
 	}
 }
 
-// void	signal_handler(int signal)
-// {
-// 	if (signal == SIGUSR1)
-// 		ft_printf("Message has been received by the server!");
-// }
+void	signal_handler(int signal)
+{
+	(void)signal;
+	g_bit_received = 0;
+}
 
 int	main(int ac, char **av)
 {
-	if (ac > 1)
+	struct sigaction	sa;
+
+	sa.sa_handler = signal_handler;
+	sigemptyset(&sa.sa_mask);
+	sa.sa_flags = SA_RESTART;
+	sigaction(SIGUSR1, &sa, NULL);
+	sigaction(SIGUSR2, &sa, NULL);
+	if (ac == 3)
 		send_signal(av[1], av[2]);
-	// while (1)
-	// 	signal(SIGUSR1, signal_handler);
+	else if (ac > 3)
+	{
+		ft_printf("Error: Too many arguments\n");
+		return (1);
+	}
+	else
+	{
+		ft_printf("Error: Not enough arguments\n");
+		return (1);
+	}
 	return (0);
 }
